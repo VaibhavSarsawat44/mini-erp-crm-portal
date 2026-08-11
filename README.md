@@ -82,27 +82,61 @@ All users share the password: `Password123`
 
 ## Deployment Guidelines
 
-### Database (Neon/Supabase)
+### AWS Deployment (Preferred Setup)
+This full-stack application can be deployed to Amazon Web Services (AWS) using standard serverless and containerized services:
+
+#### 1. Database: AWS RDS PostgreSQL
+1. Open the **Amazon RDS** service in the AWS Console.
+2. Launch a new PostgreSQL DB instance (use a Free Tier template for staging/tests).
+3. Set the DB identifier, credentials (user: `postgres`, password), and configure VPC settings to allow external access.
+4. Once active, copy the DB endpoint URL and configure your database URL string:
+   `postgresql://postgres:<password>@<rds-endpoint>:5432/erp_db?schema=public`
+
+#### 2. Backend API: AWS App Runner (Or Elastic Beanstalk)
+AWS App Runner is the recommended way to deploy containerized APIs directly from your repository:
+1. Open **AWS App Runner** and click **Create Service**.
+2. Select **Source code repository**, connect your GitHub account, and choose this repository/branch.
+3. Configure build parameters:
+   - **Runtime:** `Node.js 18` (or use backend Dockerfile)
+   - **Build Command:** `npm install && npm run build`
+   - **Start Command:** `npm start`
+   - **Port:** `5001`
+4. Add the following **Environment Variables** in the App Runner configuration panel:
+   - `DATABASE_URL` (points to your AWS RDS connection string)
+   - `JWT_SECRET` (your JWT encryption signature token)
+   - `PORT=5001`
+   - `NODE_ENV=production`
+
+#### 3. Frontend Hosting: AWS Amplify
+1. Open **AWS Amplify** in the AWS console.
+2. Under "Deploy", select **GitHub** and authorize your repository.
+3. Choose the repository and branch. Amplify will auto-detect Vite build commands.
+4. Set build settings:
+   - **Base directory:** `frontend`
+   - **Build command:** `npm run build`
+5. Click **Save and Deploy**. AWS Amplify will generate a secure public domain link (e.g. `https://main.xxxx.amplifyapp.com`).
+
+---
+
+### Alternative Deployments (Render / Vercel)
+
+#### Database (Neon/Supabase)
 1. Provision a PostgreSQL cluster on Supabase or Neon.
 2. Retrieve the pooled connection URL string.
-3. Configure the `DATABASE_URL` environment variable in your production host environment.
 
-### Backend (Render)
-1. Create a new **Web Service** on Render.
-2. Link your monorepo repository.
-3. Set the **Root Directory** to `backend`.
-4. Configure Build Command: `npm install && npm run build`
-5. Configure Start Command: `npm start`
-6. Add environment variables: `DATABASE_URL`, `JWT_SECRET`, `NODE_ENV=production`, `PORT=10000`.
+#### Backend (Render)
+1. Create a new **Web Service** on Render linked to your repository.
+2. Set the **Root Directory** to `backend`.
+3. Configure Build Command: `npm install && npm run build`
+4. Configure Start Command: `npm start`
+5. Set env variables: `DATABASE_URL`, `JWT_SECRET`, `NODE_ENV=production`, `PORT=10000`.
 
-### Frontend (Vercel)
-1. Create a new Project on Vercel.
-2. Link your repository.
-3. Set the **Root Directory** to `frontend`.
-4. Set the **Framework Preset** to `Vite`.
-5. Configure Build Command: `npm run build`
-6. Configure Output Directory: `dist`
-7. Add a `vercel.json` rewrite file at root if needed to redirect API requests directly to the Render backend URL, or use environment variables like `VITE_API_URL`.
+#### Frontend (Vercel)
+1. Create a new Project on Vercel linked to your repository.
+2. Set the **Root Directory** to `frontend`.
+3. Set the **Framework Preset** to `Vite`.
+4. Configure Build Command: `npm run build` & Output Directory: `dist`.
+5. Redirect backend calls to the production API url.
 
 ---
 
