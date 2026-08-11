@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Light Theme Variables */
+  --bg-gradient-start: rgba(99, 102, 241, 0.08);
+  --bg-body-fallback: #f8fafc;
+  --bg-panel: rgba(255, 255, 255, 0.7);
+  --bg-card: rgba(255, 255, 255, 0.85);
+  --border-glass: rgba(226, 232, 240, 0.8);
+  --border-glass-card: rgba(226, 232, 240, 0.6);
+  --shadow-glass: 0 4px 30px -10px rgba(15, 23, 42, 0.04), 0 1px 3px -1px rgba(15, 23, 42, 0.02);
+  --shadow-card: 0 20px 40px -15px rgba(15, 23, 42, 0.03), 0 1px 2px 0 rgba(15, 23, 42, 0.01);
+  --shadow-hover: 0 30px 50px -20px rgba(99, 102, 241, 0.08);
+  --glow-color: rgba(59, 130, 246, 0.08);
+  
+  --color-slate-950: #f8fafc;
+  --color-slate-900: #f1f5f9;
+  --color-slate-850: #e2e8f0;
+  --color-slate-800: #cbd5e1;
+  --color-slate-700: #94a3b8;
+  --color-slate-600: #64748b;
+  --color-slate-500: #475569;
+  --color-slate-400: #334155;
+  --color-slate-300: #1e293b;
+  --color-slate-200: #0f172a;
+  --color-slate-100: #0f172a;
+}
+
+.dark {
+  /* Dark Theme Variables */
+  --bg-gradient-start: rgba(99, 102, 241, 0.12);
+  --bg-body-fallback: #020617;
+  --bg-panel: rgba(15, 23, 42, 0.45);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-glass: rgba(255, 255, 255, 0.05);
+  --border-glass-card: rgba(255, 255, 255, 0.04);
+  --shadow-glass: 0 4px 30px -10px rgba(0, 0, 0, 0.3), 0 1px 3px -1px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-hover: 0 30px 50px -20px rgba(99, 102, 241, 0.2);
+  --glow-color: rgba(99, 102, 241, 0.15);
+  
+  --color-slate-950: #020617;
+  --color-slate-900: #0f172a;
+  --color-slate-850: #1e293b;
+  --color-slate-800: #1e293b;
+  --color-slate-700: #334155;
+  --color-slate-600: #475569;
+  --color-slate-500: #64748b;
+  --color-slate-400: #94a3b8;
+  --color-slate-300: #cbd5e1;
+  --color-slate-200: #e2e8f0;
+  --color-slate-100: #f8fafc;
+}
+
+@theme {
+  /* Override font-sans with Outfit */
+  --font-sans: 'Outfit', sans-serif;
+
+  /* Dynamic CSS variable bindings for seamless light/dark toggling */
+  --color-slate-950: var(--color-slate-950);
+  --color-slate-900: var(--color-slate-900);
+  --color-slate-850: var(--color-slate-850);
+  --color-slate-800: var(--color-slate-800);
+  --color-slate-700: var(--color-slate-700);
+  --color-slate-600: var(--color-slate-600);
+  --color-slate-500: var(--color-slate-500);
+  --color-slate-400: var(--color-slate-400);
+  --color-slate-300: var(--color-slate-300);
+  --color-slate-200: var(--color-slate-200);
+  --color-slate-100: var(--color-slate-100);
+  
+  /* Indigo overrides for custom states */
+  --color-indigo-950: var(--color-slate-900);
+  --color-indigo-900: var(--color-slate-800);
+}
+
+/* Custom theme enhancements for modern light/dark mode */
+@layer base {
+  body {
+    background-color: var(--bg-body-fallback);
+    color: var(--color-slate-500);
+    font-family: var(--font-sans);
+    background-image: 
+      radial-gradient(circle at 50% -20%, var(--bg-gradient-start) 0%, rgba(248, 250, 252, 0) 65%),
+      radial-gradient(circle at 0% 100%, rgba(16, 185, 129, 0.02) 0%, rgba(248, 250, 252, 0) 50%),
+      linear-gradient(to bottom, var(--bg-body-fallback), var(--bg-body-fallback));
+    background-attachment: fixed;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight font-semibold text-slate-100;
+  }
+}
+
+/* Ultra-Premium Glassmorphism helpers */
+.glass-panel {
+  background: var(--bg-panel);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  box-shadow: 
+    var(--shadow-glass), 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass-card);
+  box-shadow: 
+    var(--shadow-card), 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    var(--shadow-hover), 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.01);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.12);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.3);
+}
+
+/* Custom transitions and animations */
+.hover-lift {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-1px) scale(1.005);
+}
+
+.hover-lift:active {
+  transform: translateY(0) scale(0.995);
+}
+
+/* Pulsing low-stock alert border */
+@keyframes border-pulse {
+  0%, 100% {
+    border-color: rgba(239, 68, 68, 0.25);
+    background: rgba(239, 68, 68, 0.01);
+  }
+  50% {
+    border-color: rgba(239, 68, 68, 0.6);
+    background: rgba(239, 68, 68, 0.04);
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.05);
+  }
+}
+
+.low-stock-alert {
+  animation: border-pulse 2.5s infinite ease-in-out;
+}
+
+/* Glowing ambient dots */
+.glow-spot-blue {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--glow-color) 0%, rgba(255, 255, 255, 0) 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Premium Tech Grid Background */
+.grid-bg {
+  background-image: 
+    radial-gradient(circle at center, transparent 0%, var(--bg-body-fallback) 85%),
+    linear-gradient(to right, rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center;
+}
+
+/* Logo Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.logo-float {
+  animation: float 5s ease-in-out infinite;
+}
+
